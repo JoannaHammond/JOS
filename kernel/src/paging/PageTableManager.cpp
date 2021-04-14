@@ -75,7 +75,7 @@ void PageTableManager::MapMemory(void* virtualMemory, void* physicalMemory, uint
     PDE.SetAddress((uint64_t)physicalMemory >> 12);
     PDE.SetFlag(PT_Flag::Present, true);
     PDE.SetFlag(PT_Flag::ReadWrite, true);
-    if(pat == 2)
+    if(pat == PAT_WC_MODE )
     {
         PDE.SetFlag(PT_Flag::PDE_PAT_4K, false);
         PDE.SetFlag(PT_Flag::CacheDisabled, true);
