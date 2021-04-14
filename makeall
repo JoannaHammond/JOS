@@ -1,0 +1,7 @@
+cd ./gnu-efi
+make bootloader
+cd ..
+cd ./kernel
+make all
+cd ..
+
