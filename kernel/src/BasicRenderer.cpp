@@ -77,8 +77,8 @@ void BasicRenderer::DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position,
 
 void BasicRenderer::Clear(){
     uint64_t fbBase = (uint64_t)TargetFramebuffer->BaseAddress;
-    uint64_t bytesPerScanline = TargetFramebuffer->PixelsPerScanLine * 4;
-    uint64_t fbHeight = TargetFramebuffer->Height;
+    //uint64_t bytesPerScanline = TargetFramebuffer->PixelsPerScanLine * 4;
+    //uint64_t fbHeight = TargetFramebuffer->Height;
     uint64_t fbSize = TargetFramebuffer->BufferSize;
 
     /*for (uint64_t verticalScanline = 0; verticalScanline < fbHeight; verticalScanline ++){
