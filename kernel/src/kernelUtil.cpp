@@ -12,8 +12,6 @@ KernelInfo kernelInfo;
 
 void PrepareMemory(BootInfo* bootInfo){
 
-    //CreatePAT();
-    
     uint64_t mMapEntries = bootInfo->mMapSize / bootInfo->mMapDescSize;
 
     GlobalAllocator = PageFrameAllocator();
@@ -95,65 +93,44 @@ void PrepareACPI(BootInfo* bootInfo){
 
 BasicRenderer r = BasicRenderer(NULL, NULL);
 KernelInfo InitializeKernel(BootInfo* bootInfo){
-    r = BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
     GlobalRenderer = &r;
-
+    // These functions are not trapped, no GUI output is possible
+    // They have to occur before we can do anything else.
     GDTDescriptor gdtDescriptor;
     gdtDescriptor.Size = sizeof(GDT) - 1;
     gdtDescriptor.Offset = (uint64_t)&DefaultGDT;
     LoadGDT(&gdtDescriptor);
-
     PrepareMemory(bootInfo);
-
-    memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
-
     PrepareInterrupts();
+    InitializeHeap((void*)0x0000100000000000, 0x1);
+    // Turn on PIC Interrupts
     outb(PIC1_DATA, 0b11111000);
     outb(PIC2_DATA, 0b11101111);
-
+    // Enable Interrupts.
     asm ("sti");
 
-    GlobalRenderer->Println("GDT/Memory/Interupts initialised.");
+    r = BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
+    memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
 
-    uint32_t val = 0;
-
-    	__asm__ volatile (
-		"mov $0x0277, %%ecx;"
-		"rdmsr;"
-        "mov %%eax, %0;" : "=r" (val) 
-	);
-
-    GlobalRenderer->Println(to_hstring(val));
-	__asm__ volatile (
-		"mov $0x277, %%ecx;"
-		"rdmsr;"
-        "mov %%edx, %0;" : "=r" (val) 
-	);
-
-    GlobalRenderer->Println(to_hstring(val));
-
+    GlobalRenderer->Println("Testing malloc/free.");
+    void *test;
+    test = malloc(8192*1024);
+    //free(test);
+    test = malloc(12*1024);
+    //free(test);
+    test = malloc(13*104);
+    //free(test);
 
     PIT::Sleepd(10);
-
-    InitializeHeap((void*)0x0000100000000000, 0x10);
-
-//    GlobalRenderer->Print("RETURNED.");
-  //  GlobalRenderer->Next();
-
- //   PIT::Sleepd(1);
- //   GlobalRenderer->Clear();
+    GlobalRenderer->Println("GDT/Memory/Interupts/Heap initialised.");
 
     InitPS2Mouse();
-
-    //GlobalRenderer->Print("PS2 Initialised.");
-    //GlobalRenderer->Next();
-
-  
+    GlobalRenderer->Println("Mouse Initialised.");
+    PIT::Sleepd(10);
     PrepareACPI(bootInfo);
 
-    //GlobalRenderer->Print("Out Initialised.");
-    //GlobalRenderer->Next();
-
-
+    GlobalRenderer->Println("Waiting for 10 seconds.");
+    //GlobalRenderer->InitBuffer();
+    
     return kernelInfo;
 }

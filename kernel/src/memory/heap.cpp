@@ -10,23 +10,14 @@ void* heapEnd;
 HeapSegHdr* LastHdr;
 
 void InitializeHeap(void* heapAddress, size_t pageCount){
-    /*GlobalRenderer->Print("Starting to initialise Heap.");
-    GlobalRenderer->Next();
-    GlobalRenderer->Print("Starting Heap Adress = ");
-    GlobalRenderer->Print(to_hstring((uint64_t)heapAddress));
-    GlobalRenderer->Next();*/
     void* pos = heapAddress;
 
     for (size_t i = 0; i < pageCount; i++){
-        //GlobalRenderer->Print("Mapping Address = ");
-        //GlobalRenderer->Print(to_hstring((uint64_t)pos));
-        //GlobalRenderer->Next();
-        g_PageTableManager.MapMemory(pos, GlobalAllocator.RequestPage());
+        void* newPage = GlobalAllocator.RequestPage();
+        g_PageTableManager.MapMemory(pos, newPage);
         pos = (void*)((size_t)pos + 0x1000);
     }
 
-    //GlobalRenderer->Print("Heap Mapped.");
-    //GlobalRenderer->Next();
 
     size_t heapLength = pageCount * 0x1000;
 
@@ -34,25 +25,20 @@ void InitializeHeap(void* heapAddress, size_t pageCount){
     heapEnd = (void*)((size_t)heapStart + heapLength);
     HeapSegHdr* startSeg = (HeapSegHdr*)heapAddress;
     
-    //GlobalRenderer->Print("Setting start segment Lenth.");
     startSeg->length = heapLength - sizeof(HeapSegHdr);
-    //GlobalRenderer->Print("Setting start segment next to null.");
     startSeg->next = NULL;
-    //GlobalRenderer->Print("Setting start segment last to null.");
     startSeg->last = NULL;
-    //GlobalRenderer->Print("Setting start segment free to null.");
     startSeg->free = true;
-    //GlobalRenderer->Print("Setting last = start.");
     LastHdr = startSeg;
-    //GlobalRenderer->Print("Returning.");
-    //GlobalRenderer->Next();
 }
 
 void free(void* address, long unsigned int i)
-    {free(address);
+{
+        free(address);
 }
 
 void free(void* address){
+    GlobalRenderer->Println("FREE Heap");
     HeapSegHdr* segment = (HeapSegHdr*)address - 1;
     segment->free = true;
     segment->CombineForward();
@@ -60,6 +46,8 @@ void free(void* address){
 }
 
 void* malloc(size_t size){
+
+    GlobalRenderer->Println("MALLOC Heap");
     if (size % 0x10 > 0){ // it is not a multiple of 0x10
         size -= (size % 0x10);
         size += 0x10;
@@ -83,17 +71,20 @@ void* malloc(size_t size){
         if (currentSeg->next == NULL) break;
         currentSeg = currentSeg->next;
     }
+    GlobalRenderer->Println("Expanding Heap");
     ExpandHeap(size);
     return malloc(size);
 }
 
 HeapSegHdr* HeapSegHdr::Split(size_t splitLength){
+    GlobalRenderer->Println("SPLIT Heap");
     if (splitLength < 0x10) return NULL;
     int64_t splitSegLength = length - splitLength - (sizeof(HeapSegHdr));
     if (splitSegLength < 0x10) return NULL;
 
     HeapSegHdr* newSplitHdr = (HeapSegHdr*) ((size_t)this + splitLength + sizeof(HeapSegHdr));
-    next->last = newSplitHdr; // Set the next segment's last segment to our new segment
+    if(next != NULL)
+        next->last = newSplitHdr; // Set the next segment's last segment to our new segment
     newSplitHdr->next = next; // Set the new segment's next segment to out original next segment
     next = newSplitHdr; // Set our new segment to the new segment
     newSplitHdr->last = this; // Set our new segment's last segment to the current segment
@@ -106,6 +97,7 @@ HeapSegHdr* HeapSegHdr::Split(size_t splitLength){
 }
 
 void ExpandHeap(size_t length){
+    GlobalRenderer->Println("EXPAND Heap");
     if (length % 0x1000) {
         length -= length % 0x1000;
         length += 0x1000;
@@ -115,8 +107,13 @@ void ExpandHeap(size_t length){
     HeapSegHdr* newSegment = (HeapSegHdr*)heapEnd;
 
     for (size_t i = 0; i < pageCount; i++){
-        g_PageTableManager.MapMemory(heapEnd, GlobalAllocator.RequestPage());
-        heapEnd = (void*)((size_t)heapEnd + 0x1000);
+        void* newPage = GlobalAllocator.RequestPage();
+        if(newPage == NULL)
+        {
+            GlobalRenderer->Println("UNABLE TO REQUEST PAGE <GAME OVER>");
+        }
+        g_PageTableManager.MapMemory(heapEnd, newPage);
+        heapEnd = (void*)((size_t)heapEnd + 0x1000 );
     }
 
     newSegment->free = true;
@@ -130,6 +127,7 @@ void ExpandHeap(size_t length){
 }
 
 void HeapSegHdr::CombineForward(){
+    GlobalRenderer->Println("CFWD Heap");
     if (next == NULL) return;
     if (!next->free) return;
 
@@ -147,6 +145,7 @@ void HeapSegHdr::CombineForward(){
 }
 
 void HeapSegHdr::CombineBackward(){
+    GlobalRenderer->Println("CBKWD Heap");
     if (last != NULL && last->free) last->CombineForward();
 }
 

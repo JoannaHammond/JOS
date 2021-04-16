@@ -3,6 +3,8 @@
 //#pragma GCC target("avx")  //Enable AVX
 #include "BasicRenderer.h"
 #include "memory.h"
+#include "memory/heap.h"
+#include "paging/PageFrameAllocator.h"
 
 BasicRenderer* GlobalRenderer;
 
@@ -11,8 +13,11 @@ BasicRenderer::BasicRenderer(Framebuffer* targetFramebuffer, PSF1_FONT* psf1_Fon
     TargetFramebuffer = targetFramebuffer;
     PSF1_Font = psf1_Font;
     Colour = 0xffffffff;
+    ClearColour = 0x00000000;
     CursorPosition = {0, 0};
+    
 }
+
 
 void BasicRenderer::PutPix(uint32_t x, uint32_t y, uint32_t colour){
     *(uint32_t*)((uint64_t)TargetFramebuffer->BaseAddress + (x*4) + (y * TargetFramebuffer->PixelsPerScanLine * 4)) = colour;
@@ -80,6 +85,12 @@ void BasicRenderer::Clear(){
     CursorPosition = {0,0};
 }
 
+void BasicRenderer::Clear(size_t lines){
+    memset32(TargetFramebuffer->BaseAddress, ClearColour, TargetFramebuffer->PixelsPerScanLine * lines);
+    CursorPosition = {0,0};
+}
+
+
 void BasicRenderer::ClearChar(){
 
     if (CursorPosition.X == 0){
@@ -142,6 +153,8 @@ void BasicRenderer::PutChar(char chr, unsigned int xOff, unsigned int yOff)
         }
         fontPtr++;
     }
+
+    
 }
 
 void BasicRenderer::PutChar(char chr)
@@ -157,4 +170,9 @@ void BasicRenderer::PutChar(char chr)
 void BasicRenderer::Println(const char* str){
     Print(str);
     Next();
+}
+
+void BasicRenderer::InitBuffer()
+{
+    doubleBuffer = (uint64_t*)malloc(TargetFramebuffer->BufferSize);
 }

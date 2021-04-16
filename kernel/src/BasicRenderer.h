@@ -7,6 +7,7 @@
 class BasicRenderer{
     public:
     BasicRenderer(Framebuffer* targetFramebuffer, PSF1_FONT* psf1_Font);
+    
     Point CursorPosition;
     Framebuffer* TargetFramebuffer;
     PSF1_FONT* PSF1_Font;
@@ -22,10 +23,13 @@ class BasicRenderer{
     uint32_t GetPix(uint32_t x, uint32_t y);
     void ClearChar();
     void Clear();
+    void Clear(size_t lines);
     void Next();
     void DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position, uint32_t colour);
     void ClearMouseCursor(uint8_t* mouseCursor, Point position);
+    void InitBuffer();
     bool MouseDrawn;
+    uint64_t* doubleBuffer = NULL;
 };
 
 extern BasicRenderer* GlobalRenderer;
