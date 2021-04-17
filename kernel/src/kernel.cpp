@@ -31,9 +31,11 @@ extern "C" void _start(BootInfo* bootInfo){
     GlobalRenderer->Print(to_string(GlobalAllocator.GetLargestFreeMemSegSize()/1024));
     GlobalRenderer->Println(" KB");
 
+    GlobalRenderer->Println("Starting scroll test is 10 seconds.");
+    PIT::Sleepd(10);
+
     for(uint64_t i = 0 ; i < 8000000; i++)
     {
-        PIT::Sleepd(1);
         GlobalRenderer->Print("Testing ");
         GlobalRenderer->Println(to_string(i));
     }
