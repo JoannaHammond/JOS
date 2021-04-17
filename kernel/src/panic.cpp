@@ -20,7 +20,7 @@ void Panic(const char* panicMessage){
 
     GlobalRenderer->Print(panicMessage);
 
-    for(unsigned long i = 0; i < 1000000000; i++);
+    for(unsigned long i = 0; i < 500000000; i++);
 
     GlobalRenderer->ClearColour = 0x00ff0000;
     GlobalRenderer->Clear(48);
@@ -35,6 +35,6 @@ void Panic(const char* panicMessage){
     GlobalRenderer->Next();
 
     GlobalRenderer->Print(panicMessage);
-    for(unsigned long i = 0; i < 1000000000; i++);
+    for(unsigned long i = 0; i < 500000000; i++);
     }
 }

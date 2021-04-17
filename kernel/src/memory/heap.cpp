@@ -38,7 +38,7 @@ void free(void* address, long unsigned int i)
 }
 
 void free(void* address){
-    GlobalRenderer->Println("FREE Heap");
+    //GlobalRenderer->Println("FREE Heap");
     HeapSegHdr* segment = (HeapSegHdr*)address - 1;
     segment->free = true;
     segment->CombineForward();
@@ -47,7 +47,7 @@ void free(void* address){
 
 void* malloc(size_t size){
 
-    GlobalRenderer->Println("MALLOC Heap");
+    //GlobalRenderer->Println("MALLOC Heap");
     if (size % 0x10 > 0){ // it is not a multiple of 0x10
         size -= (size % 0x10);
         size += 0x10;
@@ -71,13 +71,13 @@ void* malloc(size_t size){
         if (currentSeg->next == NULL) break;
         currentSeg = currentSeg->next;
     }
-    GlobalRenderer->Println("Expanding Heap");
+    //GlobalRenderer->Println("Expanding Heap");
     ExpandHeap(size);
     return malloc(size);
 }
 
 HeapSegHdr* HeapSegHdr::Split(size_t splitLength){
-    GlobalRenderer->Println("SPLIT Heap");
+    //GlobalRenderer->Println("SPLIT Heap");
     if (splitLength < 0x10) return NULL;
     int64_t splitSegLength = length - splitLength - (sizeof(HeapSegHdr));
     if (splitSegLength < 0x10) return NULL;
@@ -97,7 +97,7 @@ HeapSegHdr* HeapSegHdr::Split(size_t splitLength){
 }
 
 void ExpandHeap(size_t length){
-    GlobalRenderer->Println("EXPAND Heap");
+    //GlobalRenderer->Println("EXPAND Heap");
     if (length % 0x1000) {
         length -= length % 0x1000;
         length += 0x1000;
@@ -110,7 +110,7 @@ void ExpandHeap(size_t length){
         void* newPage = GlobalAllocator.RequestPage();
         if(newPage == NULL)
         {
-            GlobalRenderer->Println("UNABLE TO REQUEST PAGE <GAME OVER>");
+            //return;//GlobalRenderer->Println("UNABLE TO REQUEST PAGE <GAME OVER>");
         }
         g_PageTableManager.MapMemory(heapEnd, newPage);
         heapEnd = (void*)((size_t)heapEnd + 0x1000 );
@@ -127,7 +127,7 @@ void ExpandHeap(size_t length){
 }
 
 void HeapSegHdr::CombineForward(){
-    GlobalRenderer->Println("CFWD Heap");
+    //GlobalRenderer->Println("CFWD Heap");
     if (next == NULL) return;
     if (!next->free) return;
 
@@ -145,7 +145,7 @@ void HeapSegHdr::CombineForward(){
 }
 
 void HeapSegHdr::CombineBackward(){
-    GlobalRenderer->Println("CBKWD Heap");
+    //GlobalRenderer->Println("CBKWD Heap");
     if (last != NULL && last->free) last->CombineForward();
 }
 

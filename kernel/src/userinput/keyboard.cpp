@@ -19,19 +19,22 @@ void HandleKeyboard(uint8_t scancode){
             isRightShiftPressed = false;
             return;
         case Enter:
-            GlobalRenderer->Next();
+            if(GlobalRenderer!=NULL)
+                GlobalRenderer->Next();
             return;
         case Spacebar:
-            GlobalRenderer->PutChar(' ');
+            if(GlobalRenderer!=NULL)
+                GlobalRenderer->PutChar(' ');
             return;
         case BackSpace:
-           GlobalRenderer->ClearChar();
+            if(GlobalRenderer!=NULL)
+                GlobalRenderer->ClearChar();
            return;
     }
 
     char ascii = QWERTYKeyboard::Translate(scancode, isLeftShiftPressed | isRightShiftPressed);
 
-    if (ascii != 0){
+    if (ascii != 0 && GlobalRenderer != NULL){
         GlobalRenderer->PutChar(ascii);
     }
 

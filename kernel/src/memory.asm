@@ -60,3 +60,44 @@ memcpy:
 
 GLOBAL memcpy;
 
+memcpy64:
+    push  rbp
+    cld
+    mov   rbp, rsp                   
+    ;mov rdi, [rbp+8] // allready set from C call
+    ;mov rsi, [rbp+16] // allready set from C call
+    mov   rcx, rdx
+    rep   movsq
+    pop   rbp
+    ret
+
+GLOBAL memcpy64;
+
+memcpy32:
+    push  rbp
+    cld
+    mov   rbp, rsp                   
+    ;mov rdi, [rbp+8] // allready set from C call
+    ;mov rsi, [rbp+16] // allready set from C call
+    mov   rcx, rdx
+    rep   movsd
+    pop   rbp
+    ret
+
+
+GLOBAL memcpy32;
+
+memcpy16:
+    push  rbp
+    cld
+    mov   rbp, rsp                   
+    ;mov rdi, [rbp+8] // allready set from C call
+    ;mov rsi, [rbp+16] // allready set from C call
+    mov   rcx, rdx
+    rep   movsw
+    pop   rbp
+    ret
+
+
+GLOBAL memcpy16;
+

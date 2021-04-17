@@ -91,9 +91,9 @@ void PrepareACPI(BootInfo* bootInfo){
     PCI::EnumeratePCI(mcfg);
 }
 
-BasicRenderer r = BasicRenderer(NULL, NULL);
+//BasicRenderer r = BasicRenderer(NULL, NULL);
 KernelInfo InitializeKernel(BootInfo* bootInfo){
-    GlobalRenderer = &r;
+    GlobalRenderer = NULL;
     // These functions are not trapped, no GUI output is possible
     // They have to occur before we can do anything else.
     GDTDescriptor gdtDescriptor;
@@ -103,34 +103,32 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
     PrepareMemory(bootInfo);
     PrepareInterrupts();
     InitializeHeap((void*)0x0000100000000000, 0x1);
-    // Turn on PIC Interrupts
+    // Turn on PIC Interrupt Flags
     outb(PIC1_DATA, 0b11111000);
     outb(PIC2_DATA, 0b11101111);
     // Enable Interrupts.
     asm ("sti");
 
-    r = BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
+    GlobalRenderer = new BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
     memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
 
-    GlobalRenderer->Println("Testing malloc/free.");
-    void *test;
-    test = malloc(8192*1024);
+    //GlobalRenderer->Println("Testing malloc/free.");
+    //GlobalRenderer->InitBuffer();
+    //void *test;
+    //test = malloc(8192*1024);
     //free(test);
-    test = malloc(12*1024);
+    //test = malloc(12*1024);
     //free(test);
-    test = malloc(13*104);
+    //test = malloc(13*104);
     //free(test);
 
-    PIT::Sleepd(10);
     GlobalRenderer->Println("GDT/Memory/Interupts/Heap initialised.");
 
     InitPS2Mouse();
     GlobalRenderer->Println("Mouse Initialised.");
-    PIT::Sleepd(10);
     PrepareACPI(bootInfo);
 
     GlobalRenderer->Println("Waiting for 10 seconds.");
-    //GlobalRenderer->InitBuffer();
     
     return kernelInfo;
 }

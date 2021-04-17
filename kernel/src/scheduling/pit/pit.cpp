@@ -1,5 +1,6 @@
 #include "pit.h"
 #include "../../IO.h"
+#include "../../BasicRenderer.h"
 
 namespace PIT{
     double TimeSinceBoot = 0;
@@ -35,5 +36,13 @@ namespace PIT{
 
     void Tick(){
         TimeSinceBoot += 1 / (double)GetFrequency();
+
+
+        // Every 16ms update screen
+        if((unsigned long)(TimeSinceBoot) % 16 == 0)
+        {
+            if(GlobalRenderer != NULL)
+               GlobalRenderer->PaintScreen();
+        }
     }
 }

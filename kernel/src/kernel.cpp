@@ -7,6 +7,7 @@
 extern "C" void _start(BootInfo* bootInfo){
 
     KernelInfo kernelInfo = InitializeKernel(bootInfo);
+
     GlobalRenderer->Print("PageTableManager @");
     GlobalRenderer->Println(to_hstring((uint64_t)kernelInfo.pageTableManager));
 
@@ -30,7 +31,12 @@ extern "C" void _start(BootInfo* bootInfo){
     GlobalRenderer->Print(to_string(GlobalAllocator.GetLargestFreeMemSegSize()/1024));
     GlobalRenderer->Println(" KB");
 
-    
+    for(uint64_t i = 0 ; i < 8000000; i++)
+    {
+        PIT::Sleepd(1);
+        GlobalRenderer->Print("Testing ");
+        GlobalRenderer->Println(to_string(i));
+    }
 
     PIT::Sleepd(60);
 

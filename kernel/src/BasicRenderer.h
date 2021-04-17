@@ -7,10 +7,9 @@
 class BasicRenderer{
     public:
     BasicRenderer(Framebuffer* targetFramebuffer, PSF1_FONT* psf1_Font);
-    
-    Point CursorPosition;
+    ~BasicRenderer();
     Framebuffer* TargetFramebuffer;
-    PSF1_FONT* PSF1_Font;
+    Point CursorPosition;
     uint32_t MouseCursorBuffer[16 * 16];
     uint32_t MouseCursorBufferAfter[16 * 16];
     unsigned int Colour;
@@ -27,9 +26,17 @@ class BasicRenderer{
     void Next();
     void DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position, uint32_t colour);
     void ClearMouseCursor(uint8_t* mouseCursor, Point position);
-    void InitBuffer();
+    void CheckScreenOverFlow();
+    void ScrollScreenUpLn();
+    void PaintScreen();
+
+    private:
+
+    PSF1_FONT* PSF1_Font;
     bool MouseDrawn;
-    uint64_t* doubleBuffer = NULL;
+    uint32_t* doubleBuffer = NULL;
+    bool dirty = true;
+    bool redrawing = false;
 };
 
 extern BasicRenderer* GlobalRenderer;
