@@ -1,6 +1,6 @@
 #include "pit.h"
 #include "../../IO.h"
-#include "../../BasicRenderer.h"
+#include "../../rendering/BasicRenderer.h"
 
 namespace PIT{
     double TimeSinceBoot = 0;

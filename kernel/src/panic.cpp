@@ -1,5 +1,5 @@
 #include "panic.h"
-#include "BasicRenderer.h"
+#include "rendering/BasicRenderer.h"
 
 void Panic(const char* panicMessage){
 

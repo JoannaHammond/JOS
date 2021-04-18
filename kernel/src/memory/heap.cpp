@@ -1,7 +1,7 @@
 #include "heap.h"
 #include "../paging/PageTableManager.h"
 #include "../paging/PageFrameAllocator.h"
-#include "../BasicRenderer.h"
+#include "../rendering/BasicRenderer.h"
 #include "../scheduling/pit/pit.h"
 #include "../cstr.h"
 
