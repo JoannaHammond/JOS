@@ -111,6 +111,7 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
 
     GlobalRenderer = new BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
     memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
+    GlobalRenderer->SetOverlayImage(bootInfo->logoImage);
 
     //GlobalRenderer->Println("Testing malloc/free.");
     //GlobalRenderer->InitBuffer();

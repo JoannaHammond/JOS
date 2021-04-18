@@ -139,8 +139,8 @@ void ProcessMousePacket(){
         
         if(GlobalRenderer != NULL)
         {
-           // GlobalRenderer->ClearMouseCursor(MousePointer, MousePositionOld);
-          //  GlobalRenderer->DrawOverlayMouseCursor(MousePointer, MousePosition, 0xffffffff);
+            GlobalRenderer->ClearMouseCursor(MousePointer, MousePositionOld);
+            GlobalRenderer->DrawOverlayMouseCursor(MousePointer, MousePosition, 0xffffffff);
         }
 
         if (MousePacket[0] & PS2Leftbutton){

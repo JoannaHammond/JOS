@@ -21,6 +21,7 @@ struct BootInfo {
 	uint64_t mMapSize;
 	uint64_t mMapDescSize;
 	ACPI::RSDP2* rsdp;
+	uint32_t* logoImage;
 } ;
 
 extern uint64_t _KernelStart;

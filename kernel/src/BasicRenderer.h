@@ -29,12 +29,15 @@ class BasicRenderer{
     void CheckScreenOverFlow();
     void ScrollScreenUpLn();
     void PaintScreen();
+    void SetOverlayImage(uint32_t* image);
 
     private:
-
+    uint32_t* overlayImage = NULL;
     PSF1_FONT* PSF1_Font;
     bool MouseDrawn;
     uint32_t* doubleBuffer = NULL;
+    uint32_t* consoleBuffer = NULL;
+    uint32_t* overlayBuffer = NULL;
     bool dirty = true;
     bool redrawing = false;
 };

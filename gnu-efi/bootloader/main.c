@@ -1,8 +1,7 @@
 #include <efi.h>
 #include <efilib.h>
 #include <elf.h>
-
-typedef unsigned long long size_t;
+#include <stddef.h>
 
 typedef struct {
 	void* BaseAddress;
@@ -109,6 +108,20 @@ PSF1_FONT* LoadPSF1Font(EFI_FILE* Directory, CHAR16* Path, EFI_HANDLE ImageHandl
 
 }
 
+uint32_t* LoadSmallLogo(EFI_FILE* Directory, CHAR16* Path, EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE* SystemTable)
+{
+	EFI_FILE* smallLogoFile = LoadFile(Directory, Path, ImageHandle, SystemTable);
+
+	UINTN fileSize = 320 * 180 * 4;
+
+	uint32_t* image = NULL;
+	SystemTable->BootServices->AllocatePool(EfiLoaderData, fileSize, (void**)&image);
+
+	smallLogoFile->Read(smallLogoFile, &fileSize, image);
+
+	return image;
+}
+
 int memcmp(const void* aptr, const void* bptr, size_t n){
 	const unsigned char* a = aptr, *b = bptr;
 	for (size_t i = 0; i < n; i++){
@@ -125,6 +138,7 @@ typedef struct {
 	UINTN mMapSize;
 	UINTN mMapDescSize;
 	void* rsdp;
+	uint32_t* smallImage;
 } BootInfo;
 
 UINTN strcmp(CHAR8* a, CHAR8* b, UINTN length){
@@ -206,6 +220,7 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 
 	Print(L"Kernel Loaded\n\r");
 	
+	uint32_t* logoImage = LoadSmallLogo(NULL, L"jos-small.rgba", ImageHandle, SystemTable);
 
 	PSF1_FONT* newFont = LoadPSF1Font(NULL, L"zap-light16.psf", ImageHandle, SystemTable);
 	if (newFont == NULL){
@@ -259,6 +274,7 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 	bootInfo.mMapSize = MapSize;
 	bootInfo.mMapDescSize = DescriptorSize;
 	bootInfo.rsdp = rsdp;
+	bootInfo.smallImage = logoImage;
 
 	Print(L"Exiting boot services.\r\n");
 

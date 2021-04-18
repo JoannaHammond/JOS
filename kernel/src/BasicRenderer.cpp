@@ -17,6 +17,10 @@ BasicRenderer::BasicRenderer(Framebuffer* targetFramebuffer, PSF1_FONT* psf1_Fon
     CursorPosition = {0, 0};
     doubleBuffer = (uint32_t*)malloc(TargetFramebuffer->BufferSize);
     memset32(doubleBuffer, ClearColour, TargetFramebuffer->BufferSize / 4);
+    consoleBuffer = (uint32_t*)malloc(TargetFramebuffer->BufferSize);
+    memset32(consoleBuffer, ClearColour, TargetFramebuffer->BufferSize / 4);
+    overlayBuffer = (uint32_t*)malloc(TargetFramebuffer->BufferSize);
+    memset32(overlayBuffer, ClearColour, TargetFramebuffer->BufferSize / 4);
     dirty = true;
     redrawing = false;
 }
@@ -24,15 +28,18 @@ BasicRenderer::BasicRenderer(Framebuffer* targetFramebuffer, PSF1_FONT* psf1_Fon
 BasicRenderer::~BasicRenderer()
 {
     free(doubleBuffer);
+    free(consoleBuffer);
+    free(overlayBuffer);
+    free(overlayImage);
 }
 
 void BasicRenderer::PutPix(uint32_t x, uint32_t y, uint32_t colour){
-    *(uint32_t*)(doubleBuffer + (x*4) + (y * TargetFramebuffer->PixelsPerScanLine * 4)) = colour;
+    *(uint32_t*)(overlayBuffer + (x) + (y * TargetFramebuffer->PixelsPerScanLine)) = colour;
     dirty = true;
 }
 
 uint32_t BasicRenderer::GetPix(uint32_t x, uint32_t y){
-    return *(uint32_t*)(doubleBuffer + (x*4) + (y * TargetFramebuffer->PixelsPerScanLine * 4));
+    return *(uint32_t*)(overlayBuffer + (x) + (y * TargetFramebuffer->PixelsPerScanLine ));
 }
 
 void BasicRenderer::ClearMouseCursor(uint8_t* mouseCursor, Point position){
@@ -89,13 +96,13 @@ void BasicRenderer::DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position,
 }
 
 void BasicRenderer::Clear(){
-    memset32(doubleBuffer, ClearColour, TargetFramebuffer->BufferSize / 4);
+    memset32(consoleBuffer, ClearColour, TargetFramebuffer->BufferSize / 4);
     CursorPosition = {0,0};
     dirty = true;
 }
 
 void BasicRenderer::Clear(size_t lines){
-    memset32(doubleBuffer, ClearColour, TargetFramebuffer->PixelsPerScanLine * lines);
+    memset32(consoleBuffer, ClearColour, TargetFramebuffer->PixelsPerScanLine * lines);
     CursorPosition = {0,0};
     dirty = true;
 }
@@ -112,7 +119,7 @@ void BasicRenderer::ClearChar(){
     unsigned int xOff = CursorPosition.X;
     unsigned int yOff = CursorPosition.Y;
 
-    unsigned int* pixPtr = (unsigned int*)doubleBuffer;
+    unsigned int* pixPtr = (unsigned int*)overlayBuffer;
     for (unsigned long y = yOff; y < yOff + 16; y++){
         for (unsigned long x = xOff - 8; x < xOff; x++){
                     *(unsigned int*)(pixPtr + x + (y * TargetFramebuffer->PixelsPerScanLine)) = ClearColour;
@@ -154,7 +161,7 @@ void BasicRenderer::Print(const char* str)
 
 void BasicRenderer::PutChar(char chr, unsigned int xOff, unsigned int yOff)
 {
-    unsigned int* pixPtr = (unsigned int*)doubleBuffer;
+    unsigned int* pixPtr = (unsigned int*)consoleBuffer;
     char* fontPtr = (char*)PSF1_Font->glyphBuffer + (chr * PSF1_Font->psf1_Header->charsize);
     for (unsigned long y = yOff; y < yOff + 16; y++){
         for (unsigned long x = xOff; x < xOff+8; x++){
@@ -186,7 +193,18 @@ void BasicRenderer::Println(const char* str){
 
 void BasicRenderer::PaintScreen()
 {   if(redrawing || !dirty) return;
+
+
     redrawing = true;
+    memcpy64(doubleBuffer,consoleBuffer, (TargetFramebuffer->BufferSize / 8));
+    if(overlayImage!=NULL)
+    {
+        memcpy64(overlayBuffer,overlayImage, (1080*180));
+    }
+    for(uint64_t i = 0; i < TargetFramebuffer->BufferSize / 4; i ++)
+    {
+        doubleBuffer[i] += overlayBuffer[i];
+    }
     memcpy64(TargetFramebuffer->BaseAddress,doubleBuffer, (TargetFramebuffer->BufferSize / 8));
     dirty = false;
     redrawing = false;
@@ -194,10 +212,10 @@ void BasicRenderer::PaintScreen()
 
 void BasicRenderer::ScrollScreenUpLn()
 {
-    void* startline = doubleBuffer + (16 * TargetFramebuffer->PixelsPerScanLine);
+    void* startline = consoleBuffer + (16 * TargetFramebuffer->PixelsPerScanLine);
     uint64_t count = (TargetFramebuffer->BufferSize/4) - (16*TargetFramebuffer->PixelsPerScanLine);
-    void* clearLineAddress = doubleBuffer + (TargetFramebuffer->BufferSize/4) - (16 * TargetFramebuffer->PixelsPerScanLine);
-    memcpy32(doubleBuffer, startline, count);
+    void* clearLineAddress = consoleBuffer + (TargetFramebuffer->BufferSize/4) - (16 * TargetFramebuffer->PixelsPerScanLine);
+    memcpy32(consoleBuffer, startline, count);
     memset32(clearLineAddress, ClearColour, (16 * TargetFramebuffer->PixelsPerScanLine));   
     dirty = true;
 }
@@ -209,4 +227,24 @@ void BasicRenderer::CheckScreenOverFlow()
         CursorPosition.Y -= 16;
         ScrollScreenUpLn();
     }
+}
+
+void BasicRenderer::SetOverlayImage(uint32_t* image)
+{
+    uint32_t* processOverlayImage = (uint32_t*)malloc(TargetFramebuffer->PixelsPerScanLine*180*32);
+    memset32(processOverlayImage, 0, TargetFramebuffer->PixelsPerScanLine*180);
+
+    // covert to screen width (it's a 320x180 atm) and center it;
+
+    for(int i = 0; i < 320; i ++)
+    {
+        for(int j = 0; j < 180; j++)
+        {
+            processOverlayImage[
+                (TargetFramebuffer->PixelsPerScanLine * j) + (i + ((TargetFramebuffer->PixelsPerScanLine-320)/2))
+                ] =
+            image[(j * 320) + i];
+        }
+    }
+    overlayImage = processOverlayImage;
 }
