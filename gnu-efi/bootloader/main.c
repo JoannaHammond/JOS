@@ -112,9 +112,14 @@ uint32_t* LoadSmallLogo(EFI_FILE* Directory, CHAR16* Path, EFI_HANDLE ImageHandl
 {
 	EFI_FILE* smallLogoFile = LoadFile(Directory, Path, ImageHandle, SystemTable);
 
+	if(smallLogoFile == NULL)
+	{
+		Print(L"Unable to logo load image file.\n\r");
+	}
+
 	UINTN fileSize = 320 * 180 * 4;
 
-	uint32_t* image = NULL;
+	void* image = NULL;
 	SystemTable->BootServices->AllocatePool(EfiLoaderData, fileSize, (void**)&image);
 
 	smallLogoFile->Read(smallLogoFile, &fileSize, image);
@@ -151,7 +156,6 @@ UINTN strcmp(CHAR8* a, CHAR8* b, UINTN length){
 EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 	
 	InitializeLib(ImageHandle, SystemTable);
-	Print(L"String blah blah blah \n\r");
 
 	EFI_FILE* Kernel = LoadFile(NULL, L"kernel.elf", ImageHandle, SystemTable);
 	if (Kernel == NULL){
@@ -219,9 +223,11 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 	}
 
 	Print(L"Kernel Loaded\n\r");
-	
+	Print(L"Loading Logo Image \n\r");
+
 	uint32_t* logoImage = LoadSmallLogo(NULL, L"jos-small.rgba", ImageHandle, SystemTable);
 
+	Print(L"Loading Font \n\r");
 	PSF1_FONT* newFont = LoadPSF1Font(NULL, L"zap-light16.psf", ImageHandle, SystemTable);
 	if (newFont == NULL){
 		Print(L"Font is not valid or is not found\n\r");
@@ -231,7 +237,7 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 		Print(L"Font found. char size = %d\n\r", newFont->psf1_Header->charsize);
 	}
 	
-
+	Print(L"Initialising GOP \n\r");
 	Framebuffer* newBuffer = InitializeGOP();
 
 	Print(L"Base: 0x%x\n\rSize: 0x%x\n\rWidth: %d\n\rHeight: %d\n\rPixelsPerScanline: %d\n\r", 
@@ -241,6 +247,7 @@ EFI_STATUS efi_main (EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
 	newBuffer->Height, 
 	newBuffer->PixelsPerScanLine);
 
+	Print(L"Finding RSD \n\r");
 	EFI_MEMORY_DESCRIPTOR* Map = NULL;
 	UINTN MapSize, MapKey;
 	UINTN DescriptorSize;

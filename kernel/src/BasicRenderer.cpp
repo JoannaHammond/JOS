@@ -199,7 +199,7 @@ void BasicRenderer::PaintScreen()
     memcpy64(doubleBuffer,consoleBuffer, (TargetFramebuffer->BufferSize / 8));
     if(overlayImage!=NULL)
     {
-        memcpy64(overlayBuffer,overlayImage, (1080*180));
+        memcpy64(overlayBuffer,overlayImage, (TargetFramebuffer->PixelsPerScanLine*180/2));
     }
     for(uint64_t i = 0; i < TargetFramebuffer->BufferSize / 4; i ++)
     {
@@ -233,17 +233,20 @@ void BasicRenderer::SetOverlayImage(uint32_t* image)
 {
     uint32_t* processOverlayImage = (uint32_t*)malloc(TargetFramebuffer->PixelsPerScanLine*180*32);
     memset32(processOverlayImage, 0, TargetFramebuffer->PixelsPerScanLine*180);
-
+    unsigned int width = 320;
+    unsigned int height = 180;
+    
     // covert to screen width (it's a 320x180 atm) and center it;
 
-    for(int i = 0; i < 320; i ++)
+    
+    for(int y = 0; y < height; y++)
     {
-        for(int j = 0; j < 180; j++)
+        for(int x = 0; x < width; x ++)      
         {
             processOverlayImage[
-                (TargetFramebuffer->PixelsPerScanLine * j) + (i + ((TargetFramebuffer->PixelsPerScanLine-320)/2))
+                (TargetFramebuffer->PixelsPerScanLine * y) + (x + ((TargetFramebuffer->PixelsPerScanLine-width)/2))
                 ] =
-            image[(j * 320) + i];
+            image[(y * width) + x];
         }
     }
     overlayImage = processOverlayImage;
