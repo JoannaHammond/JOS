@@ -1,7 +1,3 @@
-
-#pragma GCC optimize("Ofast")//,"unroll-loops","inline") //Optimization flags
-#pragma GCC target("sse")  //Enable sse
-
 #include "memory.h"
 
 uint64_t GetMemorySize(EFI_MEMORY_DESCRIPTOR* mMap, uint64_t mMapEntries, uint64_t mMapDescSize){
@@ -16,11 +12,4 @@ uint64_t GetMemorySize(EFI_MEMORY_DESCRIPTOR* mMap, uint64_t mMapEntries, uint64
 
     return memorySizeBytes;
 
-}
-
-void memVectorCopy(uint64_t *dest, uint64_t *src, unsigned long length)
-{
-     for (unsigned long n=0; n < length; n++){
-        dest[n] = src[n];
-    }
 }
