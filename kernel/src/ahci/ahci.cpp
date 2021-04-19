@@ -48,9 +48,8 @@ namespace AHCI{
         for (int i = 0; i < 32; i++){
             if (portsImplemented & (1 << i)){
                 PortType portType = CheckPortType(&ABAR->ports[i]);
-                GlobalRenderer->Print("Port Type = ");
-                GlobalRenderer->Print(to_string((uint64_t)portType));
-                GlobalRenderer->Next();
+                GlobalRenderer->defaultCanvases->textCanvas->Print("Port Type = ");
+                GlobalRenderer->defaultCanvases->textCanvas->Println(to_string((uint64_t)portType));
                 if (portType == PortType::SATA || portType == PortType::SATAPI){
                     ports[portCount] = new Port();
                     ports[portCount]->portType = portType;
@@ -60,9 +59,8 @@ namespace AHCI{
                 }
             }
         }
-        GlobalRenderer->Print("Total Port Count = ");
-        GlobalRenderer->Print(to_string((uint64_t)portCount));
-        GlobalRenderer->Next();
+        GlobalRenderer->defaultCanvases->textCanvas->Print("Total Port Count = ");
+        GlobalRenderer->defaultCanvases->textCanvas->Println(to_string((uint64_t)portCount));
     }
 
     void Port::Configure(){
@@ -199,8 +197,7 @@ namespace AHCI{
     AHCIDriver::AHCIDriver(PCI::PCIDeviceHeader* pciBaseAddress){
         this->PCIBaseAddress = pciBaseAddress;
         portCount = 0;
-        GlobalRenderer->Print("AHCI Driver instance initialized");
-        GlobalRenderer->Next();
+        GlobalRenderer->defaultCanvases->textCanvas->Println("AHCI Driver instance initialized");
         
         //PIT::Sleepd(5);
 
@@ -222,6 +219,7 @@ namespace AHCI{
         //GlobalRenderer->Next();
         PIT::Sleepd(5);
 
+/*
         for (int i = 0; i < portCount; i++){
             Port* port = ports[i];
 
@@ -243,10 +241,10 @@ namespace AHCI{
             //PIT::Sleepd(5);
             port->Read(0, 4, port->buffer);
             for (int t = 0; t < 1024; t++){
-                GlobalRenderer->PutChar(port->buffer[t]);
+                GlobalRenderer->defaultCanvases->textCanvas->PutChar(port->buffer[t]);
             }
-            GlobalRenderer->Next();
-        }
+            GlobalRenderer->defaultCanvases->textCanvas->Next();
+        }*/
     }
 
     AHCIDriver::~AHCIDriver(){

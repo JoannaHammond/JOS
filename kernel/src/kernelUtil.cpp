@@ -109,27 +109,20 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
     // Enable Interrupts.
     asm ("sti");
 
-    GlobalRenderer = new BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
     memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
+    GlobalRenderer = new BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
+    //GlobalRenderer->defaultCanvases->textCanvas->ClearColour = 0xff00ffff;
+    //GlobalRenderer->defaultCanvases->textCanvas->Clear();
+    
     GlobalRenderer->SetOverlayImage(bootInfo->logoImage);
 
-    //GlobalRenderer->Println("Testing malloc/free.");
-    //GlobalRenderer->InitBuffer();
-    //void *test;
-    //test = malloc(8192*1024);
-    //free(test);
-    //test = malloc(12*1024);
-    //free(test);
-    //test = malloc(13*104);
-    //free(test);
+    GlobalRenderer->defaultCanvases->textCanvas->Println("GDT/Memory/Interupts/Heap initialised.");
 
-    GlobalRenderer->Println("GDT/Memory/Interupts/Heap initialised.");
-
-    InitPS2Mouse();
-    GlobalRenderer->Println("Mouse Initialised.");
+    //InitPS2Mouse();
+    GlobalRenderer->defaultCanvases->textCanvas->Println("Mouse Initialised.");
     PrepareACPI(bootInfo);
 
-    GlobalRenderer->Println("Waiting for 10 seconds.");
+    GlobalRenderer->defaultCanvases->textCanvas->Println("Waiting for 10 seconds.");
     
     return kernelInfo;
 }

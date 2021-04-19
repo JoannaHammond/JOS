@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include "PageFrameAllocator.h"
 #include "../memory.h"
-#include "../rendering/BasicRenderer.h"
 #include "../cstr.h"
 #include "../scheduling/pit/pit.h"
 

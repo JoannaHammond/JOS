@@ -131,16 +131,18 @@ void ProcessMousePacket(){
             }
         }
 
-        if (MousePosition.X < 0) MousePosition.X = 0;
-        if (MousePosition.X > GlobalRenderer->TargetFramebuffer->Width-1) MousePosition.X = GlobalRenderer->TargetFramebuffer->Width-1;
-        
-        if (MousePosition.Y < 0) MousePosition.Y = 0;
-        if (MousePosition.Y > GlobalRenderer->TargetFramebuffer->Height-1) MousePosition.Y = GlobalRenderer->TargetFramebuffer->Height-1;
-        
         if(GlobalRenderer != NULL)
         {
-            GlobalRenderer->ClearMouseCursor(MousePointer, MousePositionOld);
-            GlobalRenderer->DrawOverlayMouseCursor(MousePointer, MousePosition, 0xffffffff);
+           /* Canvas::CanvasInfo* info =  GlobalRenderer->defaultCanvases->mouseCanvas->GetCanvasInfo();
+
+            if (MousePosition.X < 0) MousePosition.X = 0;
+            if (MousePosition.X > info->width-1) MousePosition.X = info->width-1;
+        
+            if (MousePosition.Y < 0) MousePosition.Y = 0;
+            if (MousePosition.Y > info->height-1) MousePosition.Y = info->height-1;
+        
+            GlobalRenderer->defaultCanvases->mouseCanvas->ClearMouseCursor(MousePointer, MousePositionOld);
+            GlobalRenderer->defaultCanvases->mouseCanvas->DrawOverlayMouseCursor(MousePointer, MousePosition, 0xffffffff);*/
         }
 
         if (MousePacket[0] & PS2Leftbutton){

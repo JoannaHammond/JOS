@@ -15,16 +15,16 @@ namespace PCI{
         if (pciDeviceHeader->DeviceID == 0) return;
         if (pciDeviceHeader->DeviceID == 0xFFFF) return;
 
-        GlobalRenderer->Print(GetVendorName(pciDeviceHeader->VendorID));
-        GlobalRenderer->Print(" / ");
-        GlobalRenderer->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
-        GlobalRenderer->Print(" / ");
-        GlobalRenderer->Print(DeviceClasses[pciDeviceHeader->Class]);
-        GlobalRenderer->Print(" / ");
-        GlobalRenderer->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
-        GlobalRenderer->Print(" / ");
-        GlobalRenderer->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
-        GlobalRenderer->Next();
+        GlobalRenderer->defaultCanvases->textCanvas->Print(GetVendorName(pciDeviceHeader->VendorID));
+        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
+        GlobalRenderer->defaultCanvases->textCanvas->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
+        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
+        GlobalRenderer->defaultCanvases->textCanvas->Print(DeviceClasses[pciDeviceHeader->Class]);
+        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
+        GlobalRenderer->defaultCanvases->textCanvas->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
+        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
+        GlobalRenderer->defaultCanvases->textCanvas->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
+        GlobalRenderer->defaultCanvases->textCanvas->Next();
 
         switch (pciDeviceHeader->Class){
             case 0x01: // mass storage controller
@@ -32,8 +32,8 @@ namespace PCI{
                     case 0x06: //Serial ATA 
                         switch (pciDeviceHeader->ProgIF){
                             case 0x01: //AHCI 1.0 device
-                                GlobalRenderer->Print("Starting AHCI Driver.");
-                                GlobalRenderer->Next();
+                                GlobalRenderer->defaultCanvases->textCanvas->Print("Starting AHCI Driver.");
+                                GlobalRenderer->defaultCanvases->textCanvas->Next();
                                 new AHCI::AHCIDriver(pciDeviceHeader);
                         }
                 }

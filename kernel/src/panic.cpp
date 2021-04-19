@@ -5,36 +5,36 @@ void Panic(const char* panicMessage){
 
     __asm__ ("sti");
 
-    while(1)    {
-    GlobalRenderer->ClearColour = 0x000000ff;
-    GlobalRenderer->Clear(48);
+    //while(1)    {
+    //GlobalRenderer->defaultCanvases->textCanvas->ClearColour = 0x000000ff;
+    //GlobalRenderer->defaultCanvases->textCanvas->Clear();
 
-    GlobalRenderer->CursorPosition = {0, 0};
+    GlobalRenderer->defaultCanvases->textCanvas->CursorPosition = {0, 0};
 
-    GlobalRenderer->Colour = 0xffffffff;
+    GlobalRenderer->defaultCanvases->textCanvas->Colour = 0xffffffff;
 
-    GlobalRenderer->Print("Kernel Panic");
+    GlobalRenderer->defaultCanvases->textCanvas->Print("Kernel Panic");
 
-    GlobalRenderer->Next();
-    GlobalRenderer->Next();
+    GlobalRenderer->defaultCanvases->textCanvas->Next();
+    GlobalRenderer->defaultCanvases->textCanvas->Next();
 
-    GlobalRenderer->Print(panicMessage);
+    GlobalRenderer->defaultCanvases->textCanvas->Print(panicMessage);
 
+    /*for(unsigned long i = 0; i < 500000000; i++);
+
+    GlobalRenderer->defaultCanvases->textCanvas->ClearColour = 0x00ff0000;
+    GlobalRenderer->defaultCanvases->textCanvas->Clear();
+
+    GlobalRenderer->defaultCanvases->textCanvas->CursorPosition = {0, 0};
+
+    GlobalRenderer->defaultCanvases->textCanvas->Colour = 0xffffffff;
+
+    GlobalRenderer->defaultCanvases->textCanvas->Print("Kernel Panic");
+
+    GlobalRenderer->defaultCanvases->textCanvas->Next();
+    GlobalRenderer->defaultCanvases->textCanvas->Next();
+
+    GlobalRenderer->defaultCanvases->textCanvas->Print(panicMessage);
     for(unsigned long i = 0; i < 500000000; i++);
-
-    GlobalRenderer->ClearColour = 0x00ff0000;
-    GlobalRenderer->Clear(48);
-
-    GlobalRenderer->CursorPosition = {0, 0};
-
-    GlobalRenderer->Colour = 0xffffffff;
-
-    GlobalRenderer->Print("Kernel Panic");
-
-    GlobalRenderer->Next();
-    GlobalRenderer->Next();
-
-    GlobalRenderer->Print(panicMessage);
-    for(unsigned long i = 0; i < 500000000; i++);
-    }
+    }*/
 }

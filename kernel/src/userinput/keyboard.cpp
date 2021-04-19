@@ -19,23 +19,23 @@ void HandleKeyboard(uint8_t scancode){
             isRightShiftPressed = false;
             return;
         case Enter:
-            if(GlobalRenderer!=NULL)
-                GlobalRenderer->Next();
+            //if(GlobalRenderer!=NULL)
+               // GlobalRenderer->defaultCanvases->textCanvas->Next();
             return;
         case Spacebar:
-            if(GlobalRenderer!=NULL)
-                GlobalRenderer->PutChar(' ');
+           // if(GlobalRenderer!=NULL)
+                //GlobalRenderer->defaultCanvases->textCanvas->PutChar(' ');
             return;
         case BackSpace:
-            if(GlobalRenderer!=NULL)
-                GlobalRenderer->ClearChar();
+            //if(GlobalRenderer!=NULL)
+                //GlobalRenderer->defaultCanvases->textCanvas->ClearChar();
            return;
     }
 
     char ascii = QWERTYKeyboard::Translate(scancode, isLeftShiftPressed | isRightShiftPressed);
 
     if (ascii != 0 && GlobalRenderer != NULL){
-        GlobalRenderer->PutChar(ascii);
+       // GlobalRenderer->defaultCanvases->textCanvas->PutChar(ascii);
     }
 
 }
