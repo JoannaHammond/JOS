@@ -38,8 +38,8 @@ namespace PIT{
     void Tick(){
         TimeSinceBoot += 1 / (double)GetFrequency();
 
-        // Every 16ms update screen
-        if(LastRefresh + 0.32 < TimeSinceBoot)
+        // Every 32ms update screen (30fps)
+        if(LastRefresh + 0.03333333 < TimeSinceBoot)
         {
             LastRefresh = TimeSinceBoot;
             if(GlobalRenderer != NULL)

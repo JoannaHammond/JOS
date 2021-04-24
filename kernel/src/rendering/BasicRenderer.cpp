@@ -16,15 +16,12 @@ BasicRenderer::~BasicRenderer()
 }
 
 void BasicRenderer::PaintScreen()
-{   if(redrawing || !rootCanvas->IsDirty()) return;
-
+{  
+    if(rootCanvas == NULL || redrawing || !rootCanvas->IsDirty()) return;
 
     redrawing = true;
-    if(rootCanvas != NULL)
-    {
-        void *paintBuffer = rootCanvas->Paint();
-        memcpy32(TargetFramebuffer->BaseAddress,paintBuffer, TargetFramebuffer->BufferSize / 4);
-    }
+    void *paintBuffer = rootCanvas->Paint();
+    memcpy32(TargetFramebuffer->BaseAddress,paintBuffer, TargetFramebuffer->BufferSize / 4);
     redrawing = false;
 }
 
