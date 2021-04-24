@@ -59,9 +59,4 @@ class Canvas {
 
     private:
     LinkedList<Canvas> childCanvases;
-    
-    // testing crap
-    Canvas* test = NULL;
-    int32_t t = 0;
-
 };

@@ -117,11 +117,11 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
 
     GlobalRenderer = new BasicRenderer(bootInfo->framebuffer);
     TextCanvas* textCanvas = GlobalRenderer->createTextCanvas(1, bootInfo->psf1_Font);
+    GlobalPrinter.RegisterTextCanvas(textCanvas);
     ImageCanvas* imageCanvas = new ImageCanvas((bootInfo->framebuffer->PixelsPerScanLine-320)/2,0,320,180,65536,Canvas::OVERLAY_MODE::ADD);
     imageCanvas->SetImage(bootInfo->logoImage);
     GlobalRenderer->getRootCanvas()->AddChildCanvas(textCanvas);
     GlobalRenderer->getRootCanvas()->AddChildCanvas(imageCanvas);
-    GlobalPrinter.RegisterTextCanvas(textCanvas);
     
     GlobalPrinter.Println("GDT/Memory/Interupts/Heap initialised.");
 

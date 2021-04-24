@@ -16,7 +16,7 @@ BasicRenderer::~BasicRenderer()
 }
 
 void BasicRenderer::PaintScreen()
-{   if(redrawing) return;
+{   if(redrawing || !rootCanvas->IsDirty()) return;
 
 
     redrawing = true;

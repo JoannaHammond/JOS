@@ -12,9 +12,7 @@ Canvas::Canvas(uint32_t xorigin, uint32_t yorigin, uint32_t width, uint32_t heig
     _canvasInfo.pixelBufferSize = width * height;
     _canvasInfo.bufferSize = _canvasInfo.pixelBufferSize * 4;
     _canvasInfo.buffer = (uint32_t*)malloc(_canvasInfo.bufferSize);
-    //memset32(_canvasInfo.buffer, 0, _canvasInfo.bufferSize / 4);
-    test = NULL;
-    t = 0;
+    memset32(_canvasInfo.buffer, 0, _canvasInfo.pixelBufferSize);
 
     dirty = true;
 }
@@ -59,8 +57,8 @@ Canvas::CanvasInfo* Canvas::GetCanvasInfo()
 }
 
 void* Canvas::Paint()
-{
-    
+{   
+    if(!IsDirty()) return _canvasInfo.buffer;
     for(Canvas* c = childCanvases.firstItem(); c != NULL ; c = childCanvases.nextItem())
     {
         c->Paint();
@@ -111,5 +109,10 @@ void Canvas::RemoveChildCanvas(Canvas* c)
 }
 
 bool Canvas::IsDirty() {
+    bool dirty = this->dirty;
+    for(Canvas* c = childCanvases.firstItem(); c != NULL ; c = childCanvases.nextItem())
+    {
+        dirty |= c->dirty;
+    }
     return dirty;
 }
