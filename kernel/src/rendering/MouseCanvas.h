@@ -9,6 +9,8 @@ class MouseCanvas : public Canvas {
     void DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position, uint32_t colour);
     void ClearMouseCursor(uint8_t* mouseCursor, Point position);
 
+    void* Paint() override;
+
     private:
     uint32_t MouseCursorBuffer[16 * 16];
     uint32_t MouseCursorBufferAfter[16 * 16];

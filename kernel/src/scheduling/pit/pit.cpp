@@ -39,7 +39,7 @@ namespace PIT{
         TimeSinceBoot += 1 / (double)GetFrequency();
 
         // Every 16ms update screen
-        if(LastRefresh + 0.016 < TimeSinceBoot)
+        if(LastRefresh + 0.32 < TimeSinceBoot)
         {
             LastRefresh = TimeSinceBoot;
             if(GlobalRenderer != NULL)

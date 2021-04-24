@@ -4,6 +4,7 @@
 #include "paging/PageTableManager.h"
 #include "rendering/BasicRenderer.h"
 #include "cstr.h"
+#include "utils/print.h"
 
 namespace PCI{
     struct PCIDeviceHeader{

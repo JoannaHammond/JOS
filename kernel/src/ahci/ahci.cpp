@@ -5,6 +5,7 @@
 #include "../paging/PageFrameAllocator.h"
 #include "../cstr.h"
 #include "../scheduling/pit/pit.h"
+#include "../utils/print.h"
 
 namespace AHCI{
 
@@ -48,8 +49,8 @@ namespace AHCI{
         for (int i = 0; i < 32; i++){
             if (portsImplemented & (1 << i)){
                 PortType portType = CheckPortType(&ABAR->ports[i]);
-                GlobalRenderer->defaultCanvases->textCanvas->Print("Port Type = ");
-                GlobalRenderer->defaultCanvases->textCanvas->Println(to_string((uint64_t)portType));
+                GlobalPrinter.PrintText("Port Type = ");
+                GlobalPrinter.Println(to_string((uint64_t)portType));
                 if (portType == PortType::SATA || portType == PortType::SATAPI){
                     ports[portCount] = new Port();
                     ports[portCount]->portType = portType;
@@ -59,8 +60,8 @@ namespace AHCI{
                 }
             }
         }
-        GlobalRenderer->defaultCanvases->textCanvas->Print("Total Port Count = ");
-        GlobalRenderer->defaultCanvases->textCanvas->Println(to_string((uint64_t)portCount));
+        GlobalPrinter.PrintText("Total Port Count = ");
+        GlobalPrinter.Println(to_string((uint64_t)portCount));
     }
 
     void Port::Configure(){
@@ -197,7 +198,7 @@ namespace AHCI{
     AHCIDriver::AHCIDriver(PCI::PCIDeviceHeader* pciBaseAddress){
         this->PCIBaseAddress = pciBaseAddress;
         portCount = 0;
-        GlobalRenderer->defaultCanvases->textCanvas->Println("AHCI Driver instance initialized");
+        GlobalPrinter.Println("AHCI Driver instance initialized");
         
         //PIT::Sleepd(5);
 
@@ -217,9 +218,9 @@ namespace AHCI{
 
         //GlobalRenderer->Print("Iterating through Ports.");
         //GlobalRenderer->Next();
-        PIT::Sleepd(5);
+        //PIT::Sleepd(5);
 
-/*
+
         for (int i = 0; i < portCount; i++){
             Port* port = ports[i];
 
@@ -241,10 +242,10 @@ namespace AHCI{
             //PIT::Sleepd(5);
             port->Read(0, 4, port->buffer);
             for (int t = 0; t < 1024; t++){
-                GlobalRenderer->defaultCanvases->textCanvas->PutChar(port->buffer[t]);
+                GlobalPrinter.PrintChr(port->buffer[t]);
             }
-            GlobalRenderer->defaultCanvases->textCanvas->Next();
-        }*/
+            GlobalPrinter.Println("");
+        }
     }
 
     AHCIDriver::~AHCIDriver(){

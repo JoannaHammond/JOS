@@ -15,16 +15,15 @@ namespace PCI{
         if (pciDeviceHeader->DeviceID == 0) return;
         if (pciDeviceHeader->DeviceID == 0xFFFF) return;
 
-        GlobalRenderer->defaultCanvases->textCanvas->Print(GetVendorName(pciDeviceHeader->VendorID));
-        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
-        GlobalRenderer->defaultCanvases->textCanvas->Print(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
-        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
-        GlobalRenderer->defaultCanvases->textCanvas->Print(DeviceClasses[pciDeviceHeader->Class]);
-        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
-        GlobalRenderer->defaultCanvases->textCanvas->Print(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
-        GlobalRenderer->defaultCanvases->textCanvas->Print(" / ");
-        GlobalRenderer->defaultCanvases->textCanvas->Print(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
-        GlobalRenderer->defaultCanvases->textCanvas->Next();
+        GlobalPrinter.PrintText(GetVendorName(pciDeviceHeader->VendorID));
+        GlobalPrinter.PrintText(" / ");
+        GlobalPrinter.PrintText(GetDeviceName(pciDeviceHeader->VendorID, pciDeviceHeader->DeviceID));
+        GlobalPrinter.PrintText(" / ");
+        GlobalPrinter.PrintText(DeviceClasses[pciDeviceHeader->Class]);
+        GlobalPrinter.PrintText(" / ");
+        GlobalPrinter.PrintText(GetSubclassName(pciDeviceHeader->Class, pciDeviceHeader->Subclass));
+        GlobalPrinter.PrintText(" / ");
+        GlobalPrinter.Println(GetProgIFName(pciDeviceHeader->Class, pciDeviceHeader->Subclass, pciDeviceHeader->ProgIF));
 
         switch (pciDeviceHeader->Class){
             case 0x01: // mass storage controller
@@ -32,8 +31,7 @@ namespace PCI{
                     case 0x06: //Serial ATA 
                         switch (pciDeviceHeader->ProgIF){
                             case 0x01: //AHCI 1.0 device
-                                GlobalRenderer->defaultCanvases->textCanvas->Print("Starting AHCI Driver.");
-                                GlobalRenderer->defaultCanvases->textCanvas->Next();
+                                GlobalPrinter.Println("Starting AHCI Driver.");
                                 new AHCI::AHCIDriver(pciDeviceHeader);
                         }
                 }

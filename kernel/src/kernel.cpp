@@ -8,41 +8,41 @@ extern "C" void _start(BootInfo* bootInfo){
 
     KernelInfo kernelInfo = InitializeKernel(bootInfo);
 
-    /*GlobalRenderer->defaultCanvases.textCanvas->Print("PageTableManager @");
-    GlobalRenderer->defaultCanvases.textCanvas->Println(to_hstring((uint64_t)kernelInfo.pageTableManager));
+    GlobalPrinter.PrintText("PageTableManager @");
+    GlobalPrinter.Println(to_hstring((uint64_t)kernelInfo.pageTableManager));
 
-    GlobalRenderer->defaultCanvases.textCanvas->Print("Memory Size: ");
-    GlobalRenderer->defaultCanvases.textCanvas->Print(to_string(GetMemorySize(bootInfo->mMap, bootInfo->mMapSize / bootInfo->mMapDescSize, bootInfo->mMapDescSize)/1024));
-    GlobalRenderer->defaultCanvases.textCanvas->Println(" KB");
+    GlobalPrinter.PrintText("Memory Size: ");
+    GlobalPrinter.PrintText(to_string(GetMemorySize(bootInfo->mMap, bootInfo->mMapSize / bootInfo->mMapDescSize, bootInfo->mMapDescSize)/1024));
+    GlobalPrinter.Println(" KB");
 
-    GlobalRenderer->defaultCanvases.textCanvas->Print("Free Memory : ");
-    GlobalRenderer->defaultCanvases.textCanvas->Print(to_string(GlobalAllocator.GetFreeRAM()/1024));
-    GlobalRenderer->defaultCanvases.textCanvas->Println(" KB");
+    GlobalPrinter.PrintText("Free Memory : ");
+    GlobalPrinter.PrintText(to_string(GlobalAllocator.GetFreeRAM()/1024));
+    GlobalPrinter.Println(" KB");
 
-    GlobalRenderer->defaultCanvases.textCanvas->Print("Reserved Memory : ");
-    GlobalRenderer->defaultCanvases.textCanvas->Print(to_string(GlobalAllocator.GetReservedRAM()/1024));
-    GlobalRenderer->defaultCanvases.textCanvas->Println(" KB");
+    GlobalPrinter.PrintText("Reserved Memory : ");
+    GlobalPrinter.PrintText(to_string(GlobalAllocator.GetReservedRAM()/1024));
+    GlobalPrinter.Println(" KB");
 
-    GlobalRenderer->defaultCanvases.textCanvas->Print("Used Memory : ");
-    GlobalRenderer->defaultCanvases.textCanvas->Print(to_string(GlobalAllocator.GetUsedRAM()/1024));
-    GlobalRenderer->defaultCanvases.textCanvas->Println(" KB");
+    GlobalPrinter.PrintText("Used Memory : ");
+    GlobalPrinter.PrintText(to_string(GlobalAllocator.GetUsedRAM()/1024));
+    GlobalPrinter.Println(" KB");
 
-    GlobalRenderer->defaultCanvases.textCanvas->Print("Largest Contiguos Block size : ");
-    GlobalRenderer->defaultCanvases.textCanvas->Print(to_string(GlobalAllocator.GetLargestFreeMemSegSize()/1024));
-    GlobalRenderer->defaultCanvases.textCanvas->Println(" KB");
+    GlobalPrinter.PrintText("Largest Contiguos Block size : ");
+    GlobalPrinter.PrintText(to_string(GlobalAllocator.GetLargestFreeMemSegSize()/1024));
+    GlobalPrinter.Println(" KB");
 
-    GlobalRenderer->defaultCanvases.textCanvas->Println("Starting scroll test is 10 seconds.");
+    GlobalPrinter.Println("Starting scroll test is 10 seconds.");
     PIT::Sleepd(10);
 
     for(uint64_t i = 0 ; i < 8000000; i++)
     {
-        GlobalRenderer->defaultCanvases.textCanvas->Print("Testing ");
-        GlobalRenderer->defaultCanvases.textCanvas->Println(to_string(i));
+        GlobalPrinter.PrintText("Testing ");
+        GlobalPrinter.Println(to_string(i));
     }
 
     PIT::Sleepd(60);
 
-*/
+
     Panic("TEST PANIC");
 
     //memset32(GlobalRenderer->defaultCanvases->textCanvas->GetCanvasInfo()->buffer, 0xffffffff, bootInfo->framebuffer->BufferSize/4);

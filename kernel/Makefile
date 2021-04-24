@@ -4,12 +4,13 @@ OSNAME = CustomOS
 GNUEFI = ../gnu-efi
 OVMFDIR = ../OVMFbin
 LDS = kernel.ld
-CC = gcc
+CC = g++
 ASMC = nasm
 LD = ld
 
-CFLAGS = -ffreestanding -fshort-wchar -mno-red-zone -fno-exceptions -Wall -Wextra -march=x86-64 -g
+CFLAGS = -fno-rtti -ffreestanding -fshort-wchar -mno-red-zone -fno-exceptions -Wall -Wextra -march=x86-64 
 LDFLAGS = -T $(LDS) -static -Bsymbolic -nostdlib
+
 
 SRCDIR := src
 OBJDIR := lib

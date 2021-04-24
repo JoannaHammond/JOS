@@ -7,9 +7,9 @@
 class TextCanvas : public Canvas {
     public:
     TextCanvas(uint32_t xorigin, uint32_t yorigin, uint32_t width, uint32_t height, uint32_t z_order, Canvas::OVERLAY_MODE mode, PSF1_FONT *font); 
-        
+    
 
-    void Clear();
+    void Clear() override;
     void ResetCursor();
     void ClearChar();
     void Next();
@@ -19,8 +19,10 @@ class TextCanvas : public Canvas {
     void Println(const char* str);
     void ScrollScreenUpLn();
     void CheckScreenOverFlow();
-    Point CursorPosition;
+    void SetCursorPosition(uint32_t x, uint32_t y);
+    void* Paint() override;
 
     private:
     PSF1_FONT* psf1_Font;
+    Point CursorPosition;
 };

@@ -11,8 +11,8 @@ void MouseCanvas::ClearMouseCursor(uint8_t* mouseCursor, Point position){
 
     int xMax = 16;
     int yMax = 16;
-    int differenceX = _canvasInfo->width - position.X;
-    int differenceY = _canvasInfo->height - position.Y;
+    int differenceX = _canvasInfo.width - position.X;
+    int differenceY = _canvasInfo.height - position.Y;
 
     if (differenceX < 16) xMax = differenceX;
     if (differenceY < 16) yMax = differenceY;
@@ -36,8 +36,8 @@ void MouseCanvas::DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position, u
 
     int xMax = 16;
     int yMax = 16;
-    int differenceX = _canvasInfo->width - position.X;
-    int differenceY = _canvasInfo->height - position.Y;
+    int differenceX = _canvasInfo.width - position.X;
+    int differenceY = _canvasInfo.height - position.Y;
 
     if (differenceX < 16) xMax = differenceX;
     if (differenceY < 16) yMax = differenceY;
@@ -57,4 +57,9 @@ void MouseCanvas::DrawOverlayMouseCursor(uint8_t* mouseCursor, Point position, u
     }
 
     MouseDrawn = true;
+}
+
+void* MouseCanvas::Paint()
+{
+    return _canvasInfo.buffer;
 }

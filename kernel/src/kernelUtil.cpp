@@ -7,6 +7,10 @@
 #include "scheduling/pit/pit.h"
 #include "paging/PageTableManager.h"
 #include "cstr.h"
+#include "utils/print.h"
+#include "rendering/Canvas.h"
+#include "rendering/TextCanvas.h"
+#include "rendering/LogoCanvas.h"
 
 KernelInfo kernelInfo; 
 
@@ -110,19 +114,22 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
     asm ("sti");
 
     memset(bootInfo->framebuffer->BaseAddress, 0, bootInfo->framebuffer->BufferSize);
-    GlobalRenderer = new BasicRenderer(bootInfo->framebuffer, bootInfo->psf1_Font);
-    //GlobalRenderer->defaultCanvases->textCanvas->ClearColour = 0xff00ffff;
-    //GlobalRenderer->defaultCanvases->textCanvas->Clear();
+
+    GlobalRenderer = new BasicRenderer(bootInfo->framebuffer);
+    TextCanvas* textCanvas = GlobalRenderer->createTextCanvas(1, bootInfo->psf1_Font);
+    LogoCanvas* logoCanvas = GlobalRenderer->createLogoCanvas(65536);
+    logoCanvas->SetOverlayImage(bootInfo->logoImage);
+    GlobalRenderer->getRootCanvas()->AddChildCanvas(textCanvas);
+    GlobalRenderer->getRootCanvas()->AddChildCanvas(logoCanvas);
+    GlobalPrinter.RegisterTextCanvas(textCanvas);
     
-    GlobalRenderer->SetOverlayImage(bootInfo->logoImage);
+    GlobalPrinter.Println("GDT/Memory/Interupts/Heap initialised.");
 
-    GlobalRenderer->defaultCanvases->textCanvas->Println("GDT/Memory/Interupts/Heap initialised.");
-
-    //InitPS2Mouse();
-    GlobalRenderer->defaultCanvases->textCanvas->Println("Mouse Initialised.");
+    InitPS2Mouse();
+    GlobalPrinter.Println("Mouse Initialised.");
     PrepareACPI(bootInfo);
 
-    GlobalRenderer->defaultCanvases->textCanvas->Println("Waiting for 10 seconds.");
+    GlobalPrinter.Println("Waiting for 10 seconds.");
     
     return kernelInfo;
 }
