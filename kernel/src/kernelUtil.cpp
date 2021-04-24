@@ -10,7 +10,7 @@
 #include "utils/print.h"
 #include "rendering/Canvas.h"
 #include "rendering/TextCanvas.h"
-#include "rendering/LogoCanvas.h"
+#include "rendering/ImageCanvas.h"
 
 KernelInfo kernelInfo; 
 
@@ -117,10 +117,10 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
 
     GlobalRenderer = new BasicRenderer(bootInfo->framebuffer);
     TextCanvas* textCanvas = GlobalRenderer->createTextCanvas(1, bootInfo->psf1_Font);
-    LogoCanvas* logoCanvas = GlobalRenderer->createLogoCanvas(65536);
-    logoCanvas->SetOverlayImage(bootInfo->logoImage);
+    ImageCanvas* imageCanvas = new ImageCanvas((bootInfo->framebuffer->PixelsPerScanLine-320)/2,0,320,180,65536,Canvas::OVERLAY_MODE::ADD);
+    imageCanvas->SetImage(bootInfo->logoImage);
     GlobalRenderer->getRootCanvas()->AddChildCanvas(textCanvas);
-    GlobalRenderer->getRootCanvas()->AddChildCanvas(logoCanvas);
+    GlobalRenderer->getRootCanvas()->AddChildCanvas(imageCanvas);
     GlobalPrinter.RegisterTextCanvas(textCanvas);
     
     GlobalPrinter.Println("GDT/Memory/Interupts/Heap initialised.");

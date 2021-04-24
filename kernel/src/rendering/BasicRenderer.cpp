@@ -33,11 +33,6 @@ Canvas* BasicRenderer::createDefaultCanvas(uint32_t z_order)
     return new Canvas(0,0,TargetFramebuffer->PixelsPerScanLine,TargetFramebuffer->Height,z_order,Canvas::OVERLAY_MODE::COPY);
 }
 
-LogoCanvas* BasicRenderer::createLogoCanvas(uint32_t z_order)
-{
-    return new LogoCanvas(0,0,TargetFramebuffer->PixelsPerScanLine,TargetFramebuffer->Height,z_order,Canvas::OVERLAY_MODE::ADD);
-}
-
 TextCanvas* BasicRenderer::createTextCanvas(uint32_t z_order, PSF1_FONT* psf1_Font){
     return new TextCanvas(0,0,TargetFramebuffer->PixelsPerScanLine,TargetFramebuffer->Height,z_order,Canvas::OVERLAY_MODE::COPY, psf1_Font);
 }

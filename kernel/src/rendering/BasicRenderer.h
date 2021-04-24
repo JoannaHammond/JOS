@@ -6,7 +6,6 @@
 #include "Canvas.h"
 #include "TextCanvas.h"
 #include "MouseCanvas.h"
-#include "LogoCanvas.h"
 #include "../memory.h"
 #include "../memory/heap.h"
 
@@ -20,7 +19,6 @@ class BasicRenderer{
     Canvas* getRootCanvas();
 
     Canvas* createDefaultCanvas(uint32_t z_order);
-    LogoCanvas* createLogoCanvas(uint32_t z_order);
     TextCanvas* createTextCanvas(uint32_t z_order, PSF1_FONT* psf1_Font);
     MouseCanvas* createMouseCanvas(uint32_t z_order);
 
