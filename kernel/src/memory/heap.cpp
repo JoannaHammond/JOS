@@ -1,9 +1,6 @@
 #include "heap.h"
 #include "../paging/PageTableManager.h"
 #include "../paging/PageFrameAllocator.h"
-#include "../rendering/BasicRenderer.h"
-#include "../scheduling/pit/pit.h"
-#include "../cstr.h"
 
 void* heapStart;
 void* heapEnd;
@@ -108,10 +105,6 @@ void ExpandHeap(size_t length){
 
     for (size_t i = 0; i < pageCount; i++){
         void* newPage = GlobalAllocator.RequestPage();
-        if(newPage == NULL)
-        {
-            //return;//GlobalRenderer->Println("UNABLE TO REQUEST PAGE <GAME OVER>");
-        }
         g_PageTableManager.MapMemory(heapEnd, newPage);
         heapEnd = (void*)((size_t)heapEnd + 0x1000 );
     }

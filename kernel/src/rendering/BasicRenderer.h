@@ -1,13 +1,11 @@
 #pragma once
-#include "../math.h"
+#include "../utils/math/math.h"
 #include "Framebuffer.h"
-#include "../simpleFonts.h" 
+#include "../fonts/simpleFonts.h" 
 #include <stdint.h>
 #include "Canvas.h"
 #include "TextCanvas.h"
 #include "MouseCanvas.h"
-#include "../memory.h"
-#include "../memory/heap.h"
 
 class BasicRenderer{
     public:

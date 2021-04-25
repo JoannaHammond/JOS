@@ -2,7 +2,7 @@
 #include "memory/heap.h"
 #include "scheduling/pit/pit.h"
 #include "panic.h"
-#include "memory.h"
+#include "memory/memory.h"
 
 extern "C" void _start(BootInfo* bootInfo){
 

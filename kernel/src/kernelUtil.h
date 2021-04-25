@@ -2,17 +2,17 @@
 
 #include <stdint.h>
 #include "rendering/BasicRenderer.h"
-#include "cstr.h"
-#include "efiMemory.h"
-#include "memory.h"
-#include "Bitmap.h"
+#include "utils/cstr.h"
+#include "efi/efiMemory.h"
+#include "memory/memory.h"
+#include "utils/maps/Bitmap.h"
 #include "paging/PageFrameAllocator.h"
 #include "paging/PageMapIndexer.h"
 #include "paging/paging.h"
 #include "paging/PageTableManager.h"
 #include "userinput/mouse.h"
-#include "acpi.h"
-#include "pci.h"
+#include "acpi/acpi.h"
+#include "pci/pci.h"
 
 struct BootInfo {
 	Framebuffer* framebuffer;

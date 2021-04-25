@@ -2,8 +2,8 @@
 #include "PageMapIndexer.h"
 #include <stdint.h>
 #include "PageFrameAllocator.h"
-#include "../memory.h"
-#include "../cstr.h"
+#include "../memory/memory.h"
+#include "../utils/cstr.h"
 #include "../scheduling/pit/pit.h"
 
 PageTableManager g_PageTableManager = NULL;

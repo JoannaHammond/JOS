@@ -1,55 +1,87 @@
 #pragma once
+#pragma GCC optimize("O3","unroll-loops","omit-frame-pointer","inline") //Optimization flags
+#pragma GCC target("avx")  //Enable AVX
 
 #include "Canvas.h"
+#include "../utils/math/math.h"
+
 
 namespace CanvasUtils {
     
     void* OR_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-        for(uint64_t i = 0; i < src->width * src->width * src->height; i++)
-        {
-            dest->buffer[i] |= src->buffer[i];
-        }
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] |= src->buffer[srcBufferOffset];
+            }
 
         return dest->buffer;
     }
     void* AND_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-        for(uint64_t i = 0; i < src->width * src->width * src->height; i++)
-        {
-            dest->buffer[i] &= src->buffer[i];
-        }
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] &= src->buffer[srcBufferOffset];
+            }
 
         return dest->buffer;
     }
     void* ADD_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-
-        for(uint64_t x = 0; x < dest->width - src->xorigin && x < src->width; x++)
-            for(uint64_t y = 0; y < dest->height - src->yorigin && y < src->height; y++)
-                dest->buffer[x + src->xorigin + ((y + src->yorigin)*dest->width)] += 
-                    src->buffer[x + (y*src->width)];
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] += src->buffer[srcBufferOffset];
+            }
 
         return dest->buffer;
     }
     void* SUB_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-        for(uint64_t i = 0; i < src->width * src->width * src->height; i++)
-        {
-            dest->buffer[i] -= src->buffer[i];
-        }
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] -= src->buffer[srcBufferOffset];
+            }
 
         return dest->buffer;
     }
     void* MUL_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-        for(uint64_t i = 0; i < src->width * src->width * src->height; i++)
-        {
-            dest->buffer[i] *= src->buffer[i];
-        }
-
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] *= src->buffer[srcBufferOffset];
+            }
         return dest->buffer;
     }
     void* DIV_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
-        for(uint64_t i = 0; i < src->width * src->height; i++)
-        {
-            dest->buffer[i] /= src->buffer[i];
-        }
+        uint32_t maxScreenWidthToUse = min(dest->width - src->xorigin, src->width);
+        uint32_t maxScreenHeigthToUse = min(dest->height - src->yorigin,src->height);
+        for(uint32_t x = 0; x < maxScreenWidthToUse; x++)
+            for(uint32_t y = 0; y < maxScreenHeigthToUse ; y++)
+            {
+                uint32_t destBufferOffset = x + src->xorigin + ((y + src->yorigin)*dest->width);
+                uint32_t srcBufferOffset = x + (y*src->width);
+                dest->buffer[destBufferOffset] /= src->buffer[srcBufferOffset];
+            }
 
         return dest->buffer;
     }

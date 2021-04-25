@@ -3,7 +3,7 @@
 #include "../paging/PageTableManager.h"
 #include "../memory/heap.h"
 #include "../paging/PageFrameAllocator.h"
-#include "../cstr.h"
+#include "../utils/cstr.h"
 #include "../scheduling/pit/pit.h"
 #include "../utils/print.h"
 

@@ -1,4 +1,6 @@
 #include "BasicRenderer.h"
+#include "../memory/memory.h"
+#include "../memory/heap.h"
 
 BasicRenderer* GlobalRenderer;
 
@@ -20,8 +22,7 @@ void BasicRenderer::PaintScreen()
     if(rootCanvas == NULL || redrawing || !rootCanvas->IsDirty()) return;
 
     redrawing = true;
-    void *paintBuffer = rootCanvas->Paint();
-    memcpy32(TargetFramebuffer->BaseAddress,paintBuffer, TargetFramebuffer->BufferSize / 4);
+    memcpy32(TargetFramebuffer->BaseAddress,rootCanvas->Paint(), TargetFramebuffer->BufferSize / 4);
     redrawing = false;
 }
 

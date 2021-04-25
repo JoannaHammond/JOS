@@ -1,6 +1,6 @@
 #pragma once
 #include "Canvas.h"
-#include "../math.h"
+#include "../utils/math/math.h"
 
 class MouseCanvas : public Canvas {
     public:

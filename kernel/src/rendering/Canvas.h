@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "../memory/heap.h"
-#include "../memory.h"
+#include "../memory/memory.h"
 #include "../utils/lists/LinkedList.hpp"
 
 class Canvas {

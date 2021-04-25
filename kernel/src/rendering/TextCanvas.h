@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Canvas.h"
-#include "../math.h"
-#include "../simpleFonts.h" 
+#include "../utils/math/math.h"
+#include "../fonts/simpleFonts.h" 
 
 class TextCanvas : public Canvas {
     public:

@@ -1,6 +1,6 @@
 #include "interrupts.h"
 #include "../panic.h"
-#include "../IO.h"
+#include "../io/IO.h"
 #include "../userinput/keyboard.h"
 #include "../scheduling/pit/pit.h"
 

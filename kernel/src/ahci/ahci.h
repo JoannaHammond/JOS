@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-#include "../pci.h"
+#include "../pci/pci.h"
 
 namespace AHCI {
 
