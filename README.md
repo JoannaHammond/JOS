@@ -1,3 +1,3 @@
-# PonchoOS
+# JOS extended from PonchoOS
  
-Git repo of the Operating System tutorial series by Poncho
+Git repo of the Operating System development
