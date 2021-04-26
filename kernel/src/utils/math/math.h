@@ -7,3 +7,7 @@ struct Point{
 };
 
 uint32_t min(uint32_t a, uint32_t b);
+uint32_t abs(uint32_t a);
+float abs(float a);
+double abs(double a);
+

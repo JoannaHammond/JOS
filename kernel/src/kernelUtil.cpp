@@ -11,6 +11,7 @@
 #include "rendering/Canvas.h"
 #include "rendering/TextCanvas.h"
 #include "rendering/ImageCanvas.h"
+#include "rendering/SimpleDrawingCanvas.h"
 
 KernelInfo kernelInfo; 
 
@@ -95,7 +96,6 @@ void PrepareACPI(BootInfo* bootInfo){
     PCI::EnumeratePCI(mcfg);
 }
 
-//BasicRenderer r = BasicRenderer(NULL, NULL);
 KernelInfo InitializeKernel(BootInfo* bootInfo){
     GlobalRenderer = NULL;
     // These functions are not trapped, no GUI output is possible
@@ -120,7 +120,10 @@ KernelInfo InitializeKernel(BootInfo* bootInfo){
     GlobalPrinter.RegisterTextCanvas(textCanvas);
     ImageCanvas* imageCanvas = new ImageCanvas((bootInfo->framebuffer->PixelsPerScanLine-320)/2,0,320,180,65536,Canvas::OVERLAY_MODE::ADD);
     imageCanvas->SetImage(bootInfo->logoImage);
+    SimpleDrawingCanvas* sdCanvas = new SimpleDrawingCanvas(0,0,bootInfo->framebuffer->PixelsPerScanLine,bootInfo->framebuffer->Height,33,Canvas::OVERLAY_MODE::ADD);
+    sdCanvas->DrawTriangle(100,100,500,200,300,400,0xff00ff00);
     GlobalRenderer->getRootCanvas()->AddChildCanvas(textCanvas);
+    GlobalRenderer->getRootCanvas()->AddChildCanvas(sdCanvas);
     GlobalRenderer->getRootCanvas()->AddChildCanvas(imageCanvas);
     
     GlobalPrinter.Println("GDT/Memory/Interupts/Heap initialised.");

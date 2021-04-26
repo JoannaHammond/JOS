@@ -1,6 +1,6 @@
-#pragma once
+/*#pragma once
 #pragma GCC optimize("O3","unroll-loops","omit-frame-pointer","inline") //Optimization flags
-#pragma GCC target("avx")  //Enable AVX
+#pragma GCC target("avx")  //Enable AVX*/
 
 #include "Canvas.h"
 #include "../utils/math/math.h"

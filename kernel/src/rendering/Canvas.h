@@ -4,6 +4,7 @@
 #include "../memory/heap.h"
 #include "../memory/memory.h"
 #include "../utils/lists/LinkedList.hpp"
+#include "../utils/math/math.h"
 
 
 class Canvas {
@@ -50,6 +51,9 @@ class Canvas {
     virtual bool IsDirty();
 
     Canvas::CanvasInfo* GetCanvasInfo();
+
+    void DrawLine(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t colour);
+    void DrawTriangle(uint32_t x1, uint32_t y1, uint32_t x2, uint32_t y2, uint32_t x3, uint32_t y3, uint32_t colour);
 
     unsigned int Colour = 0xffffffff;
     unsigned int ClearColour = 0;

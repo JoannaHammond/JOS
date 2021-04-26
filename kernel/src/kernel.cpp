@@ -5,6 +5,8 @@
 #include "memory/memory.h"
 #include "utils/math/trig.h"
 #include "utils/math/matrix.hpp"
+#include "rendering/Canvas.h"
+#include "rendering/BasicRenderer.h"
 
 extern "C" void _start(BootInfo* bootInfo){
 
@@ -62,7 +64,8 @@ extern "C" void _start(BootInfo* bootInfo){
     GlobalPrinter.Println("Starting scroll test is 10 seconds.");
     PIT::Sleepd(10);
 
-    /*for(uint64_t i = 0 ; i < 8000000; i++)
+
+    for(uint64_t i = 0 ; i < 8000000; i++)
     {
         GlobalPrinter.PrintText("Testing ");
         GlobalPrinter.PrintText(to_string(i));
@@ -75,7 +78,7 @@ extern "C" void _start(BootInfo* bootInfo){
     PIT::Sleepd(60);
 
 
-    Panic("TEST PANIC");*/
+    Panic("TEST PANIC");
 
     while(true){
         asm ("hlt");

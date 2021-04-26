@@ -3,10 +3,11 @@
 #include "../../rendering/BasicRenderer.h"
 
 namespace PIT{
+    bool paintRunning = false;
     double TimeSinceBoot = 0;
     double LastRefresh = 0;
 
-    uint16_t Divisor = 32768;
+    uint16_t Divisor = 8192;
 
     void Sleepd(double seconds){
         double startTime = TimeSinceBoot;
@@ -38,12 +39,17 @@ namespace PIT{
     void Tick(){
         TimeSinceBoot += 1 / (double)GetFrequency();
 
+        
         // Every 32ms update screen (30fps)
-        if(LastRefresh + 0.03333333 < TimeSinceBoot)
+        if(LastRefresh + 0.01666666 < TimeSinceBoot)
         {
             LastRefresh = TimeSinceBoot;
-            if(GlobalRenderer != NULL)
-               GlobalRenderer->PaintScreen();
+            if(GlobalRenderer != NULL && !paintRunning)
+            {
+                paintRunning = true;
+                GlobalRenderer->PaintScreen();
+                paintRunning = false;
+            }
         }
     }
 }
