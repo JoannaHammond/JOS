@@ -86,6 +86,7 @@ namespace CanvasUtils {
         return dest->buffer;
     }
     void* COPY_BLIT(Canvas::CanvasInfo* dest, Canvas::CanvasInfo* src){
+        // NEEDS FIXING
          memcpy32(dest->buffer,src->buffer, src->pixelBufferSize);
          return dest->buffer;
     }

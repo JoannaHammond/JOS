@@ -5,6 +5,7 @@
 #include "../memory/memory.h"
 #include "../utils/lists/LinkedList.hpp"
 
+
 class Canvas {
 
     public:

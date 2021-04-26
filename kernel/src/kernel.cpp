@@ -3,6 +3,7 @@
 #include "scheduling/pit/pit.h"
 #include "panic.h"
 #include "memory/memory.h"
+#include "utils/math/trig.h"
 
 extern "C" void _start(BootInfo* bootInfo){
 
@@ -31,13 +32,21 @@ extern "C" void _start(BootInfo* bootInfo){
     GlobalPrinter.PrintText(to_string(GlobalAllocator.GetLargestFreeMemSegSize()/1024));
     GlobalPrinter.Println(" KB");
 
+    GlobalPrinter.PrintText("Trig Test Sin(1) =  ");
+    GlobalPrinter.Println(to_string((double)sin(1.0)));
+
+
     GlobalPrinter.Println("Starting scroll test is 10 seconds.");
     PIT::Sleepd(10);
 
     for(uint64_t i = 0 ; i < 8000000; i++)
     {
         GlobalPrinter.PrintText("Testing ");
-        GlobalPrinter.Println(to_string(i));
+        GlobalPrinter.PrintText(to_string(i));
+        GlobalPrinter.PrintText(",  Sin(");
+        GlobalPrinter.PrintText(to_string(((double)i)/1000.0));
+        GlobalPrinter.PrintText(") = ");
+        GlobalPrinter.Println(to_string((double)sin(((double)i)/1000.0)));
     }
 
     PIT::Sleepd(60);
