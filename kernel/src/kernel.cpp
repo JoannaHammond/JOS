@@ -4,6 +4,7 @@
 #include "panic.h"
 #include "memory/memory.h"
 #include "utils/math/trig.h"
+#include "utils/math/matrix.hpp"
 
 extern "C" void _start(BootInfo* bootInfo){
 
@@ -35,11 +36,33 @@ extern "C" void _start(BootInfo* bootInfo){
     GlobalPrinter.PrintText("Trig Test Sin(1) =  ");
     GlobalPrinter.Println(to_string((double)sin(1.0)));
 
+    double array[16] = {
+        1.0,2.0,3.0,4.0,
+        1.0,2.0,3.0,4.0,
+        1.0,2.0,3.0,4.0,
+        1.0,2.0,3.0,4.0
+    };
+
+    Matrix<double> test = Matrix<double>(4,4,array
+    );
+    Matrix<double> test2 = Matrix<double>(4,4,array
+    );
+    Matrix<double> res;
+
+    res = test * test2;
+
+    for(uint32_t i = 0; i < res.GetColumns(); i++)
+    for(uint32_t j = 0; j < res.GetRows(); j++)
+    {
+        GlobalPrinter.PrintText(to_string(res.GetElement(i,j)));
+        GlobalPrinter.PrintText(", ");
+
+    }
 
     GlobalPrinter.Println("Starting scroll test is 10 seconds.");
     PIT::Sleepd(10);
 
-    for(uint64_t i = 0 ; i < 8000000; i++)
+    /*for(uint64_t i = 0 ; i < 8000000; i++)
     {
         GlobalPrinter.PrintText("Testing ");
         GlobalPrinter.PrintText(to_string(i));
@@ -52,9 +75,8 @@ extern "C" void _start(BootInfo* bootInfo){
     PIT::Sleepd(60);
 
 
-    Panic("TEST PANIC");
+    Panic("TEST PANIC");*/
 
-    //memset32(GlobalRenderer->defaultCanvases->textCanvas->GetCanvasInfo()->buffer, 0xffffffff, bootInfo->framebuffer->BufferSize/4);
     while(true){
         asm ("hlt");
     }
